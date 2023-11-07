@@ -9,7 +9,7 @@ import { ConnectionState } from '../utils/ConectionState';
 import { ListGames } from '../utils/ListGames';
 import { Button, Select, MenuItem } from '@mui/material';
 import { PlaceBet } from './PlaceBet';
-
+import '../assets/Spinner.css';
 export const LandingPage = ({ setValue, value, userData }) => {
   const [create, setCreate] = React.useState(0);
   const [isConnected, setIsConnected] = React.useState(socket.connected);
@@ -75,38 +75,39 @@ export const LandingPage = ({ setValue, value, userData }) => {
       {/* <ConnectionState isConnected={isConnected} /> */}
       <button value='create' onClick={handleRoomButton} >Create Room</button>
       <button value='join' onClick={handleRoomButton}>Join Room</button>
-      {create ? 
-      <form onSubmit={handleSubmit}>
-        <>{userRoom ? ( 
-          <PlaceBet userData={userData} joinedRoom={userRoom}/>
-      ) : (
-        // Render a loading state or other content while waiting for data
-        <p>Loading...</p>
-      )}</>
-        <FormControl>
-          <FormLabel id="demo-controlled-radio-buttons-group">Number of players</FormLabel>
-          <RadioGroup
-            aria-labelledby="demo-controlled-radio-buttons-group"
-            name="controlled-radio-buttons-group"
-            value={value}
-            onChange={handleChange}
-          >
-            <FormControlLabel value={3} control={<Radio />} label="10" />
-            <FormControlLabel value={4} control={<Radio />} label="18" />
-          </RadioGroup>
-          <Select
-            value={balance}
-            onChange={handleBalanceChange}
-            name="balance"
-          >
-            <MenuItem value={100}>100</MenuItem>
-            <MenuItem value={200}>200</MenuItem>
-            <MenuItem value={500}>500</MenuItem>
-            <MenuItem value={1000}>1000</MenuItem>
-          </Select>
-          <Button type="submit">Submit</Button>
-        </FormControl>
-      </form> : <ListGames listGames={gameRoomsData.games_list} userData={userData} />}
+      {create ?
+        <form onSubmit={handleSubmit}>
+          <>{userRoom ? (
+            <PlaceBet userData={userData} joinedRoom={userRoom} />
+          ) : (
+            <div style={{padding:'30', alignContent:'center'}}>
+              <div className="spinner"></div>
+            </div>
+          )}</>
+          <FormControl>
+            <FormLabel id="demo-controlled-radio-buttons-group">Number of players</FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-controlled-radio-buttons-group"
+              name="controlled-radio-buttons-group"
+              value={value}
+              onChange={handleChange}
+            >
+              <FormControlLabel value={3} control={<Radio />} label="10" />
+              <FormControlLabel value={4} control={<Radio />} label="18" />
+            </RadioGroup>
+            <Select
+              value={balance}
+              onChange={handleBalanceChange}
+              name="balance"
+            >
+              <MenuItem value={100}>100</MenuItem>
+              <MenuItem value={200}>200</MenuItem>
+              <MenuItem value={500}>500</MenuItem>
+              <MenuItem value={1000}>1000</MenuItem>
+            </Select>
+            <Button type="submit">Submit</Button>
+          </FormControl>
+        </form> : <ListGames listGames={gameRoomsData.games_list} userData={userData} />}
     </>
   );
 }

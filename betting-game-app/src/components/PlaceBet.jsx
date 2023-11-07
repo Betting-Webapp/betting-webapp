@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { TextField, Button } from "@mui/material";
 import { socket } from "../socket";
+import '../assets/Spinner.css';
+import { LostGame } from "./LostGame";
+import { WonGame } from "./WonGame";
+import { SkippedScreen } from "./SkippedScreen";
 
 export const PlaceBet = ({ userData, joinedRoom }) => {
     const [bet, setBet] = useState(-1);
@@ -9,10 +13,12 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
     const [lostGame, setLostGame] = useState(false);
     const [wonGame, setWonGame] = useState(false);
     const [userWinnings, setUserWinnings] = useState(null);
+    const [loading, setLoading] = useState(false);
 
+    //Handling the cosmetic stuff and displaying balnces, Also adding the complete balance for the final round
     const handleBetValue = (event) => {
         setBet(event.target.value);
-        setContinueGame(true);
+        // setContinueGame(true);
     }
     const setBetValue = (value) => {
         setBet(value)
@@ -24,8 +30,10 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
             'bet': parseInt(bet),
         }
         socket.emit('place_bets', playerBetDeets);
-        setBetValue(0)
+        setBetValue(0);
+        setLoading(true);
     }
+
     useEffect(() => {
         function onContinue(value) {
             console.log(`RoundContinued for ${userData.uuid}`);
@@ -43,7 +51,6 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
             setWonGame(true);
             setSkippedGame(false);
             setUserWinnings(value);
-            setSkipRound(false);
         }
         function onLost(value) {
             console.log(`Round lost by ${userData.uuid}`);
@@ -73,32 +80,13 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
         };
     }, [continueGame, lostGame, wonGame, skippedGame])
     return (<>
-        {skippedGame ?
+        {
+            loading ? <div className="spinner"></div> :
+                skippedGame ?
+                    <SkippedScreen />
+                    : continueGame ?
                         <div>
-                            <h1>Congratulations you've won this round and skipped the next round!</h1>
-                        </div>
-        : continueGame ?
-            <div>
-                <h1>Continue: {joinedRoom.game_uuid}</h1>
-                <TextField
-                    placeholder='Place Bet value'
-                    value={bet}
-                    name='betValue'
-                    onChange={handleBetValue}
-                />
-                <Button type="submit" onClick={handlePlaceBet}>Submit</Button>
-            </div>
-            : lostGame ?
-                <div>
-                    <h1>Sorry You've lost the game, better luck next time</h1>
-                </div>
-                : wonGame ?
-                    <div>
-                        <h1>Congratulations you've won the game! Here's your price </h1>
-                    </div>
-                    :
-                        <div>
-                            <h1>You've joined Room: {joinedRoom.game_uuid}</h1>
+                            <h1>Continue: {joinedRoom.game_uuid}</h1>
                             <TextField
                                 placeholder='Place Bet value'
                                 value={bet}
@@ -107,6 +95,22 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
                             />
                             <Button type="submit" onClick={handlePlaceBet}>Submit</Button>
                         </div>
+                        : lostGame ?
+                            <LostGame />
+                            : wonGame ?
+                                <WonGame userWinnings={userWinnings} />
+                                :
+                                <div>
+                                    <h1>You've joined Room: {joinedRoom.game_uuid}</h1>
+                                    <TextField
+                                        placeholder='Place Bet value'
+                                        value={bet}
+                                        name='betValue'
+                                        onChange={handleBetValue}
+                                    />
+                                    <Button type="submit" onClick={handlePlaceBet}>Submit</Button>
+                                </div>
         }
     </>);
 }
+
