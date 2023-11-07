@@ -38,6 +38,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
         function onContinue(value) {
             console.log(`RoundContinued for ${userData.uuid}`);
             console.log(value);
+            setLoading(false);
             setContinueGame(true);
             setLostGame(false);
             setWonGame(false);
@@ -46,6 +47,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
         function onWinner(value) {
             console.log(`Round won by ${userData.uuid}`);
             console.log(value);
+            setLoading(false);
             setContinueGame(false);
             setLostGame(false);
             setWonGame(true);
@@ -55,6 +57,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
         function onLost(value) {
             console.log(`Round lost by ${userData.uuid}`);
             console.log(value);
+            setLoading(false);
             setContinueGame(false);
             setLostGame(true);
             setWonGame(false);
@@ -63,6 +66,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
         function onSkipped(value) {
             console.log(`Round skipped by ${userData.uuid}`);
             console.log(value);
+            setLoading(false);
             setContinueGame(false);
             setLostGame(false);
             setSkippedGame(true);
@@ -87,6 +91,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
                     : continueGame ?
                         <div>
                             <h1>Continue: {joinedRoom.game_uuid}</h1>
+                            {/* Restrict the input to number & maxbet should be less than the balance */}
                             <TextField
                                 placeholder='Place Bet value'
                                 value={bet}
@@ -102,6 +107,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
                                 :
                                 <div>
                                     <h1>You've joined Room: {joinedRoom.game_uuid}</h1>
+                                    {/* Restrict the input to number & maxbet should be less than the balance */}
                                     <TextField
                                         placeholder='Place Bet value'
                                         value={bet}
