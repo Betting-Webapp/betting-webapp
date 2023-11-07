@@ -8,6 +8,7 @@ import { SkippedScreen } from "./SkippedScreen";
 
 export const PlaceBet = ({ userData, joinedRoom }) => {
     const [bet, setBet] = useState(-1);
+    const [gameStats, setGameStats] = useState(null);
     const [continueGame, setContinueGame] = useState(false);
     const [skippedGame, setSkippedGame] = useState(false);
     const [lostGame, setLostGame] = useState(false);
@@ -20,18 +21,22 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
         setBet(event.target.value);
         // setContinueGame(true);
     }
-    const setBetValue = (value) => {
-        setBet(value)
-    }
     const handlePlaceBet = () => {
-        const playerBetDeets = {
-            'game_uuid': joinedRoom.game_uuid,
-            'uuid': userData.uuid,
-            'bet': parseInt(bet),
+        const maxBet = gameStats === null ? joinedRoom.balance : gameStats.balance;
+        if(bet > maxBet || bet <= 0 || typeof bet !== 'number'){
+            alert(`Your bets should be positive numbers, less than equal to your current balance ${maxBet}`);
+            setBet(0);
         }
-        socket.emit('place_bets', playerBetDeets);
-        setBetValue(0);
-        setLoading(true);
+        else{
+            const playerBetDeets = {
+                'game_uuid': joinedRoom.game_uuid,
+                'uuid': userData.uuid,
+                'bet': parseInt(bet),
+            }
+            socket.emit('place_bets', playerBetDeets);
+            setBet(0);
+            setLoading(true);
+        }
     }
 
     useEffect(() => {
@@ -39,6 +44,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
             console.log(`RoundContinued for ${userData.uuid}`);
             console.log(value);
             setLoading(false);
+            setGameStats(value);
             setContinueGame(true);
             setLostGame(false);
             setWonGame(false);
@@ -48,6 +54,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
             console.log(`Round won by ${userData.uuid}`);
             console.log(value);
             setLoading(false);
+            setGameStats(value);
             setContinueGame(false);
             setLostGame(false);
             setWonGame(true);
@@ -58,6 +65,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
             console.log(`Round lost by ${userData.uuid}`);
             console.log(value);
             setLoading(false);
+            setGameStats(value);
             setContinueGame(false);
             setLostGame(true);
             setWonGame(false);
@@ -67,6 +75,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
             console.log(`Round skipped by ${userData.uuid}`);
             console.log(value);
             setLoading(false);
+            setGameStats(value);
             setContinueGame(false);
             setLostGame(false);
             setSkippedGame(true);
@@ -93,10 +102,14 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
                             <h1>Continue: {joinedRoom.game_uuid}</h1>
                             {/* Restrict the input to number & maxbet should be less than the balance */}
                             <TextField
+                            inputMode="numeric"
                                 placeholder='Place Bet value'
                                 value={bet}
                                 name='betValue'
                                 onChange={handleBetValue}
+                                inputProps={{
+                                    pattern: "[0-9]*",
+                                }}
                             />
                             <Button type="submit" onClick={handlePlaceBet}>Submit</Button>
                         </div>
@@ -109,10 +122,14 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
                                     <h1>You've joined Room: {joinedRoom.game_uuid}</h1>
                                     {/* Restrict the input to number & maxbet should be less than the balance */}
                                     <TextField
+                                    inputMode="numeric"
                                         placeholder='Place Bet value'
                                         value={bet}
                                         name='betValue'
                                         onChange={handleBetValue}
+                                        inputProps={{
+                                            pattern: "[0-9]*",
+                                        }}
                                     />
                                     <Button type="submit" onClick={handlePlaceBet}>Submit</Button>
                                 </div>
