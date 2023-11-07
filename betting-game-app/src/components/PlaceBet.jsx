@@ -18,7 +18,8 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
 
     //Handling the cosmetic stuff and displaying balnces, Also adding the complete balance for the final round
     const handleBetValue = (event) => {
-        setBet(event.target.value);
+        const bet = parseInt(event.target.value);
+        setBet(bet);
         // setContinueGame(true);
     }
     const handlePlaceBet = () => {
