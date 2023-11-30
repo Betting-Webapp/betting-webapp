@@ -5,11 +5,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { socket } from '../socket';
-import { ConnectionState } from '../utils/ConectionState';
 import { ListGames } from '../utils/ListGames';
 import { Button, Select, MenuItem } from '@mui/material';
 import { PlaceBet } from './PlaceBet';
 import '../assets/Spinner.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 export const LandingPage = ({ setValue, value, userData }) => {
   const [create, setCreate] = React.useState(0);
   const [isConnected, setIsConnected] = React.useState(socket.connected);
@@ -72,7 +72,12 @@ export const LandingPage = ({ setValue, value, userData }) => {
   return (
     //Consume API for Rooms
     <>
-      {/* <ConnectionState isConnected={isConnected} /> */}
+    <BrowserRouter>
+    <Routes>
+      <Route path='/create' element={} /> {/*Have to update this block*/}
+      <Route path='/join' element = {<ListGames listGames={gameRoomsData.games_list} userData={userData} />} />
+    </Routes>
+    </BrowserRouter>
       <button value='create' onClick={handleRoomButton} >Create Room</button>
       <button value='join' onClick={handleRoomButton}>Join Room</button>
       {create ?
