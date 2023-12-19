@@ -23,7 +23,7 @@ function App() {
   const [value, setValue] = useState(3);
   const [startBets, setStartBets] = useState(false);
   const [userData, setUserData] = useState({});
-
+  const [gameRoomsData, setgameRoomsData] = useState([]);
   return (
     <div style={{flexGrow:1}}>
       <Router>
@@ -34,10 +34,10 @@ function App() {
         </AppBar>
         <Routes>
           <Route path='/registerPlayer' element={<Register/>}/>
-          <Route path='/home' element={<LandingPage setValue={setValue} value={value} userData={userData} />}/>
+          <Route path='/home' element={<LandingPage setValue={setValue} value={value} userData={userData} gameRoomsData={gameRoomsData} setgameRoomsData={setgameRoomsData} />}/>
           <Route  path='/' element={<Login userData={userData} setUserData={setUserData} />}/>
           <Route path='/create' element={<p/>} /> Have to update this block
-          <Route path='/join' element = {<ListGames listGames={gameRoomsData.games_list} userData={userData} />} />
+          <Route path='/join' element = {<ListGames listGames={gameRoomsData?.games_list } userData={userData} />} />
         </Routes>
       </Router>
     </div>

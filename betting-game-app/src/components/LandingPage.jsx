@@ -10,10 +10,10 @@ import { Button, Select, MenuItem } from '@mui/material';
 import { PlaceBet } from './PlaceBet';
 import '../assets/Spinner.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-export const LandingPage = ({ setValue, value, userData }) => {
+export const LandingPage = ({ setValue, value, userData, gameRoomsData, setgameRoomsData }) => {
   const [create, setCreate] = React.useState(0);
   const [isConnected, setIsConnected] = React.useState(socket.connected);
-  const [gameRoomsData, setgameRoomsData] = React.useState([]);
+  // const [gameRoomsData, setgameRoomsData] = React.useState([]);
   const [userRoom, setUserRoom] = React.useState(null);
   const [balance, setBalance] = React.useState(100);
   const handleBalanceChange = (event) => {
@@ -78,17 +78,19 @@ export const LandingPage = ({ setValue, value, userData }) => {
         <Route path='/join' element = {<ListGames listGames={gameRoomsData.games_list} userData={userData} />} />
       </Routes>
     </BrowserRouter> */}
-      <Button variant='outlined' value='create' onClick={handleRoomButton} >Create Room</Button>
-      <Button variant='outlined' value='join' onClick={handleRoomButton}>Join Room</Button>
+      <Button variant='outlined' value='create' onClick={handleRoomButton} disabled={userRoom ? true : false} >Create Room</Button>
+      <Button variant='outlined' value='join' onClick={handleRoomButton} disabled={userRoom ? true : false} >Join Room</Button>
       {create ?
+        userRoom ? <PlaceBet userData={userData} joinedRoom={userRoom} />
+        :
         <form onSubmit={handleSubmit}>
-          <>{userRoom ? (
+          {/* <>{userRoom ? (
             <PlaceBet userData={userData} joinedRoom={userRoom} />
           ) : (
             <div style={{padding:'30', alignContent:'center'}}>
               <div className="spinner"></div>
             </div>
-          )}</>
+          )}</> */}
           <FormControl>
             <FormLabel id="demo-controlled-radio-buttons-group">Number of players</FormLabel>
             <RadioGroup
@@ -110,9 +112,9 @@ export const LandingPage = ({ setValue, value, userData }) => {
               <MenuItem value={500}>500</MenuItem>
               <MenuItem value={1000}>1000</MenuItem>
             </Select>
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={userRoom ? true : false}>Submit</Button>
           </FormControl>
-        </form> : <ListGames listGames={gameRoomsData.games_list} userData={userData} />}
+        </form> : userRoom ? <><p>Your userroom has already been made</p></> : <ListGames listGames={gameRoomsData.games_list} userData={userData} />}
     </>
   );
 }
