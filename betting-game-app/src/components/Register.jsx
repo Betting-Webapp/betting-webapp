@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 
-export const Login = ({ userData, setUserData }) => {
+export const Register = ({ userData, setUserData }) => {
     const navigate = useNavigate();
 
     async function handleSubmit(e) {
@@ -13,7 +13,7 @@ export const Login = ({ userData, setUserData }) => {
         // await fetch('http://betting.eastus.cloudapp.azure.com:5000/loginPlayer'), {
         // await fetch('https://bettingtrial1.azurewebsites.net/loginPlayer', {
         // await fetch('http://ec2-3-144-235-181.us-east-2.compute.amazonaws.com/loginPlayer', {
-        await fetch('http://127.0.0.1:5001/loginPlayer', {
+        await fetch('http://127.0.0.1:5001/registerPlayer', {
             mode: 'cors',
             headers: {
                 Accept: "application/json",
@@ -22,9 +22,11 @@ export const Login = ({ userData, setUserData }) => {
         })
             .then((response) => response.json())
             .then(async (response) => {
-                if (response.uuid) {
-                    setUserData(response);
-                    navigate('/home')
+                if (response.status == 200) {
+                    navigate('/')
+                }
+                else {
+                    alert('Error')
                 }
             })
             .catch((err) => {
@@ -46,14 +48,19 @@ export const Login = ({ userData, setUserData }) => {
             <br/>
             <TextField variant="standard" label="Password" name="password" type="password" />
             <br/>
+            <TextField variant="standard" label="Confirm Password" name="confirmPassword" type="password" />
+            <br/>
+            <TextField variant="standard" label="First Name" name="firstName" type="text" />
+            <br/>
+            <TextField variant="standard" label="Last Name" name="lastName" type="text" />
+            <br/>
+            <TextField variant="standard" label="Contact" name="contact" type="number" />
             <br/>
             {/* <hr /> */}
             {/* <button type="reset">Reset form</button>
             <button type="submit">Submit form</button> */}
             {/* <Button variant="outlined">Reset</Button> */}
-            <Button variant="contained" type="submit">Log In</Button>
-            <div><Typography align='center' variant='h6'>OR</Typography></div>
-            <Button variant="outlined" onClick={() => {navigate('/registerPlayer')}}>Register</Button>
+            <Button variant="contained" type="submit">Register</Button>
         </form>
     </>)
 }

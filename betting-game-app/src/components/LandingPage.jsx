@@ -72,14 +72,14 @@ export const LandingPage = ({ setValue, value, userData }) => {
   return (
     //Consume API for Rooms
     <>
-    <BrowserRouter>
-    <Routes>
-      <Route path='/create' element={} /> {/*Have to update this block*/}
-      <Route path='/join' element = {<ListGames listGames={gameRoomsData.games_list} userData={userData} />} />
-    </Routes>
-    </BrowserRouter>
-      <button value='create' onClick={handleRoomButton} >Create Room</button>
-      <button value='join' onClick={handleRoomButton}>Join Room</button>
+    {/* <BrowserRouter>
+      <Routes>
+        <Route path='/create' element={<p/>} /> Have to update this block
+        <Route path='/join' element = {<ListGames listGames={gameRoomsData.games_list} userData={userData} />} />
+      </Routes>
+    </BrowserRouter> */}
+      <Button variant='outlined' value='create' onClick={handleRoomButton} >Create Room</Button>
+      <Button variant='outlined' value='join' onClick={handleRoomButton}>Join Room</Button>
       {create ?
         <form onSubmit={handleSubmit}>
           <>{userRoom ? (

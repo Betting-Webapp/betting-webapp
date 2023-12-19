@@ -43,7 +43,7 @@ export function ListGames({ listGames, userData }) {
           if (roomObject.hasOwnProperty(roomName)) {
             const roomProperties = roomObject[roomName];
             return (<li key={index}>
-              <button value={roomName} onClick={handleJoinGame}>{roomName}</button>
+              <Button variant='contained' value={roomName} onClick={handleJoinGame}>{roomName}</Button>
               <div>
                 <p>Total Players: {roomProperties.totalPlayers}</p>
                 <p>Current Players: {roomProperties.currentPlayers}</p>
