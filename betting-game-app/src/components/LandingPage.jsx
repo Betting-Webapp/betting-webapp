@@ -87,7 +87,7 @@ export const LandingPage = ({ setValue, value, userData, gameRoomsData, setgameR
     </BrowserRouter> */}
       <Button variant='outlined' value='create' onClick={handleRoomButton} disabled={userRoom ? true : false} >Create Room</Button>
       <Button variant='outlined' value='join' onClick={handleRoomButton} disabled={userRoom ? true : false} >Join Room</Button>
-      {userRoom ? <PlaceBet userData={userData} joinedRoom={userRoom} /> : 
+      {userRoom ? <PlaceBet userData={userData} joinedRoom={userRoom} /> /*Add current balance and all qualified players' balance */ : 
         create ? 
         <form onSubmit={handleSubmit}>
           {/* <>{userRoom ? (

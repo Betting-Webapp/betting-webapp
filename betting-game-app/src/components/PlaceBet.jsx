@@ -100,8 +100,8 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
                     <SkippedScreen />
                     : continueGame ?
                         <div>
-                            <h1>Continue: {joinedRoom.game_uuid}</h1>
-                            {/* Restrict the input to number & maxbet should be less than the balance */}
+                            <h1>Continue: {joinedRoom.gamename}</h1>
+                            {/* If final round; set betvalue to all balance left */}
                             <TextField
                             inputMode="numeric"
                                 placeholder='Place Bet value'
