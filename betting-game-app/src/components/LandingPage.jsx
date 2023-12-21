@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { socket } from '../socket';
 import { ListGames } from '../utils/ListGames';
-import { Button, Select, MenuItem } from '@mui/material';
+import { Button, Select, MenuItem, TextField } from '@mui/material';
 import { PlaceBet } from './PlaceBet';
 import '../assets/Spinner.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -16,18 +16,25 @@ export const LandingPage = ({ setValue, value, userData, gameRoomsData, setgameR
   // const [gameRoomsData, setgameRoomsData] = React.useState([]);
   const [userRoom, setUserRoom] = React.useState(null);
   const [balance, setBalance] = React.useState(100);
+  const [gamename, setGamename] = React.useState('');
   const handleBalanceChange = (event) => {
     setBalance(event.target.value);
   };
+  const handleRoomName = (event) => {
+    setGamename(event.target.value);
+  }
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent the default form submission (page reload)
     const userRoomDeets = {
       'uuid': userData.uuid,
+      'gamename': gamename,
       'numPlayers': value == 3 ? 10 : 18,
       'balance': balance,
     }
-    setBalance('');
+    setBalance(0);
+    setGamename('TestGame2341');
     socket.emit('createGame', userRoomDeets);
+    console.log(userRoomDeets);
   };
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -80,9 +87,8 @@ export const LandingPage = ({ setValue, value, userData, gameRoomsData, setgameR
     </BrowserRouter> */}
       <Button variant='outlined' value='create' onClick={handleRoomButton} disabled={userRoom ? true : false} >Create Room</Button>
       <Button variant='outlined' value='join' onClick={handleRoomButton} disabled={userRoom ? true : false} >Join Room</Button>
-      {create ?
-        userRoom ? <PlaceBet userData={userData} joinedRoom={userRoom} />
-        :
+      {userRoom ? <PlaceBet userData={userData} joinedRoom={userRoom} /> : 
+        create ? 
         <form onSubmit={handleSubmit}>
           {/* <>{userRoom ? (
             <PlaceBet userData={userData} joinedRoom={userRoom} />
@@ -93,6 +99,7 @@ export const LandingPage = ({ setValue, value, userData, gameRoomsData, setgameR
           )}</> */}
           <FormControl>
             <FormLabel id="demo-controlled-radio-buttons-group">Number of players</FormLabel>
+            <TextField value={gamename} onChange={handleRoomName} placeholder='Ex:TestRoom234'></TextField>
             <RadioGroup
               aria-labelledby="demo-controlled-radio-buttons-group"
               name="controlled-radio-buttons-group"
@@ -114,7 +121,7 @@ export const LandingPage = ({ setValue, value, userData, gameRoomsData, setgameR
             </Select>
             <Button type="submit" disabled={userRoom ? true : false}>Submit</Button>
           </FormControl>
-        </form> : userRoom ? <><p>Your userroom has already been made</p></> : <ListGames listGames={gameRoomsData.games_list} userData={userData} />}
+        </form> : <ListGames listGames={gameRoomsData.games_list} userData={userData} />}
     </>
   );
 }

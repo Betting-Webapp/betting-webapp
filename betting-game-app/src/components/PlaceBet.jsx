@@ -120,7 +120,7 @@ export const PlaceBet = ({ userData, joinedRoom }) => {
                                 <WonGame userWinnings={userWinnings} />
                                 :
                                 <div>
-                                    <h1>You've joined Room: {joinedRoom.game_uuid}</h1>
+                                    <h1>You've joined Room: {joinedRoom.gamename}</h1>
                                     {/* Restrict the input to number & maxbet should be less than the balance */}
                                     <TextField
                                     inputMode="numeric"
