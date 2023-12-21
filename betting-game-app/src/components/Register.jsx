@@ -13,7 +13,8 @@ export const Register = ({ userData, setUserData }) => {
         // await fetch('http://betting.eastus.cloudapp.azure.com:5000/loginPlayer'), {
         // await fetch('https://bettingtrial1.azurewebsites.net/loginPlayer', {
         // await fetch('http://ec2-3-144-235-181.us-east-2.compute.amazonaws.com/loginPlayer', {
-        await fetch('http://127.0.0.1:5001/registerPlayer', {
+        // await fetch('http://127.0.0.1:5001/registerPlayer', {
+        await fetch('https://tornelud.busillis.com/registerPlayer', {
             mode: 'cors',
             headers: {
                 Accept: "application/json",
